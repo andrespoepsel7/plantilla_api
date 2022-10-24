@@ -62,4 +62,31 @@
         }
         return $response;
     }
+
+    // Función para autenticar al usuario y ver si tiene los permisos correspondientes para
+    // poder ver el sistema de facturació
+    // Códigos de error:
+    // -1 Usuario inexistente
+    // -2 Clave incorrecta
+    function autenticar_usuario($conn){
+        $user_data = json_decode(file_get_contents('php://input')); 
+        $sql = "SELECT * FROM users WHERE email = :usuario";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':usuario', $user_data->usuario);
+        $stmt->execute();
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($usuario){
+            // Autenticar al usuario mediante la contraseña
+            if($user_data->clave === $usuario['clave']){
+                return $usuario;  
+            // El usuario puso la contraseña incorrecta    
+            }else{
+                return -2;
+            }
+        // El usuario no existe
+        }else{
+            return -1;
+        }
+    }
 ?>

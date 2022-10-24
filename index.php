@@ -38,6 +38,9 @@
             if(isset($path[2]) && $path[2] == 'crear_usuario'){
                 $response = crear_usuario($conn);
                 echo json_encode($response);
+            }else if(isset($path[2]) && $path[2] === 'autenticar_usuario'){
+                $usuario = autenticar_usuario($conn);
+                echo json_encode($usuario);
             }else{
                 echo "Error en el metodo POST";
             }
